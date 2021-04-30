@@ -20,7 +20,7 @@ int hz = 440;       // Définir ici la fréquence du son souhaité
 int duree = 1000;   // Définir ici la durée du bip souhaitée (pas garanti que ça fonctionne en cas de modification)
 
 // Paramètres de la mesure du capteur
-int mesure_moyenne_basee_sur = 1; // Fixe la mesure à la moyenne de x mesures pour éviter les fluctuations. Mettre 1 effectuera une mesure non moyennée
+int mesure_moyenne_basee_sur = 3; // Fixe la mesure à la moyenne de x mesures pour éviter les fluctuations. Mettre 1 effectuera une mesure non moyennée
 
 // Paramètres des plages de taux de CO2  
 float limite_orange = 800;    // Passe les leds et la figure en orange au dela de ce taux
@@ -28,11 +28,11 @@ float limite_rouge = 1500;    // Passe les leds et la figure en rouge au dela de
 
 // Paramètres de calibation manuelle
 int test_calib = 10;           // Teste la calibration sur la moyenne de 10 mesures. La valeur moyenne obtenue doit être comprise entre la fourchette haute et la fourchette basse
-int fourchette_basse = 370;    // Valeur la plus basse acceptable au test de calibration
-int fourchette_haute = 430;    // Valeur la plus hautte acceptable au test de calibration
+int fourchette_basse = 390;    // Valeur la plus basse acceptable au test de calibration
+int fourchette_haute = 420;    // Valeur la plus hautte acceptable au test de calibration
 String cal_passwort = "calib"; // Mot de passe protégeant la calibration
 String cal_message  = "";      // Message de calibration
-int autocalib = 0;             // Mettre à 1 si vous voulez utiliser la fonction d'autocalibration ou 0 si vous voulez utiliser une calibration à taux forcé
+int autocalib = 0;             // Mettre à 1 si vous voulez utiliser la fonction d'autocalibration INTERNE AU CAPTEUR Sensirion scd30 ou 0 si vous voulez utiliser la calibration à taux forcé de ce programme
 int val_calib = 400;           // Mettre ici le taux de CO2 servant à la calibration à taux forcé
 
 // Variables à ne pas modifier
@@ -103,7 +103,7 @@ void loop() {
       scd30.getCarbonDioxideConcentration(result);
       Serial.print("CO2[ppm]:"); Serial.println(result[0]);
       delay(2000);
-      if (result[0]<10000) {
+      if (result[0]<10000) {      // Elimination des mesures erronées
         co2 = co2 + result[0];
       } else {
         i--;
